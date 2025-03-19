@@ -1,0 +1,14 @@
+{
+  "builds": [{
+    "src": "tolsvisual_backend/wsgi.py",
+    "use": "@vercel/python",
+    "config": {"maxLambdaSize": "15mb", "runtime": "python3.10"}
+  }],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "tolsvisual_backend/wsgi.py"
+    },
+    { "src": "/staticfiles/(.*)", "dest": "/static/$1" }
+  ]
+}

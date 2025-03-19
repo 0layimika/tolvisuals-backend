@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Client</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+
+<div class="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg">
+    <h2 class="text-2xl font-bold mb-4">Create Client</h2>
+
+    <form action="" method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+
+        <label class="block text-lg font-semibold">Client Name</label>
+        <input type="text" name="name" required class="block w-full p-2 border rounded-md">
+
+        <label class="block text-lg font-semibold">Category</label>
+        <select name="category" required class="block w-full p-2 border rounded-md">
+            <option value="" disabled selected>Select a category</option>
+            <option value="engagements">Engagements</option>
+            <option value="weddings">Weddings</option>
+            <option value="portraits">Portraits</option>
+        </select>
+
+        <label class="block text-lg font-semibold">Upload Images</label>
+        <input type="file" name="images" multiple class="block w-full p-2 border rounded-md">
+
+        <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+            Create Client
+        </button>
+    </form>
+
+</div>
+
+</body>
+</html>

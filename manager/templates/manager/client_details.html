@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ client.name }} - Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg p-6">
+        <!-- Back Button -->
+        <a href="{% url 'home' %}" class="flex items-center text-blue-600 hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Dashboard
+        </a>
+
+        <!-- Client Name -->
+        <h1 class="text-3xl font-bold text-gray-900 mt-4">{{ client.name }}</h1>
+
+        <!-- Image Upload Form -->
+        <form id="uploadForm" action="{% url 'add-images' client.id %}" method="POST" enctype="multipart/form-data" class="mt-6 flex flex-col sm:flex-row items-center gap-4 bg-gray-50 p-4 rounded-lg shadow-sm">
+            {% csrf_token %}
+            <input type="file" name="images" multiple required class="border border-gray-300 p-2 rounded-md w-full sm:w-auto">
+            <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition duration-200">
+                Add Images
+            </button>
+        </form>
+
+        <!-- Image Gallery -->
+        <form id="deleteForm" action="{% url 'delete-images' client.id %}" method="POST">
+            {% csrf_token %}
+            <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {% for image in client.images.all %}
+                    <label class="relative cursor-pointer group">
+                        <input type="checkbox" name="image_ids" value="{{ image.id }}" class="hidden peer">
+                        <img src="{{ image.image.url }}" alt="Client Image" class="w-full h-32 object-cover rounded-lg shadow-md border peer-checked:ring-4 peer-checked:ring-red-500 transition duration-200">
+                    </label>
+                {% empty %}
+                    <p class="text-gray-500 col-span-full text-center">No images uploaded yet.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Delete Selected Button -->
+            <button type="button" id="deleteBtn" class="mt-6 bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-700 transition duration-200 hidden">
+                Delete Selected
+            </button>
+        </form>
+
+        <!-- Delete Client Button -->
+        <button id="deleteClientBtn" class="mt-8 w-full bg-gray-800 text-white px-5 py-3 rounded-md hover:bg-gray-900 transition duration-200">
+            Delete Client
+        </button>
+    </div>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="confirmationModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-96">
+            <h2 class="text-lg font-semibold text-gray-800">Are you sure?</h2>
+            <p class="text-gray-600 mt-2" id="modalMessage">This action cannot be undone.</p>
+            <div class="mt-4 flex justify-end gap-4">
+                <button id="cancelBtn" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 transition">Cancel</button>
+                <button id="confirmBtn" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Custom Confirmation Modal -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deleteBtn = document.getElementById("deleteBtn");
+            const deleteForm = document.getElementById("deleteForm");
+            const checkboxes = document.querySelectorAll("input[name='image_ids']");
+            const deleteClientBtn = document.getElementById("deleteClientBtn");
+
+            const modal = document.getElementById("confirmationModal");
+            const confirmBtn = document.getElementById("confirmBtn");
+            const cancelBtn = document.getElementById("cancelBtn");
+            const modalMessage = document.getElementById("modalMessage");
+
+            let deleteType = ""; // "images" or "client"
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", () => {
+                    deleteBtn.classList.toggle("hidden", !document.querySelector("input[name='image_ids']:checked"));
+                });
+            });
+
+            deleteBtn.addEventListener("click", function () {
+                deleteType = "images";
+                modalMessage.textContent = "Are you sure you want to delete the selected images?";
+                modal.classList.remove("hidden");
+            });
+
+            deleteClientBtn.addEventListener("click", function () {
+                deleteType = "client";
+                modalMessage.textContent = "Are you sure you want to delete this client and all their images?";
+                modal.classList.remove("hidden");
+            });
+
+            cancelBtn.addEventListener("click", function () {
+                modal.classList.add("hidden");
+            });
+
+            confirmBtn.addEventListener("click", function () {
+                if (deleteType === "images") {
+                    deleteForm.submit();
+                } else if (deleteType === "client") {
+                    window.location.href = "{% url 'delete-client' client.id %}";
+                }
+                modal.classList.add("hidden");
+            });
+        });
+    </script>
+
+</body>
+</html>

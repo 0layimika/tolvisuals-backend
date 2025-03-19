@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-6">Client Dashboard</h1>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {% for client in clients %}
+            <a href="{% url 'client-details' id=client.id %}" class="block bg-white rounded-lg shadow-md p-4 hover:shadow-lg">
+                <img src="{{ client.images.first.image.url }}" class="w-full h-40 object-cover rounded-md">
+                <h3 class="text-lg font-semibold text-center mt-2">{{ client.name }}</h3>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-6">
+            <a href="{% url 'create-client' %}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                Create New Client
+            </a>
+        </div>
+    </div>
+</body>
+</html>
