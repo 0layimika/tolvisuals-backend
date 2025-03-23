@@ -5,7 +5,7 @@ class PortfolioSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     class Meta:
         model = Portfolio
-        fields = ['id','category','image','image_url']
+        fields = ['id','category','image_url']
 
     def get_image_url(self, obj):
         if obj.image:
@@ -16,7 +16,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     class Meta:
         model = Review
-        fields = ['id','name','image','comment','image_url']
+        fields = ['id','name','comment','image_url']
 
     def get_image_url(self, obj):
         if obj.image:
@@ -28,7 +28,7 @@ class ClientImageSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     class Meta:
         model = ClientImage
-        fields = ['id', 'client', 'image', 'image_url']
+        fields = ['id', 'client', 'image_url']
 
     def get_image_url(self, obj):
         if obj.image:
