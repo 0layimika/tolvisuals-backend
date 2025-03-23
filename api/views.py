@@ -120,8 +120,10 @@ class HomeView(APIView):
 
 class AboutView(APIView):
     def get(self, request):
+        print("dog")
         try:
             about = About.objects.first()
+            print(about.top_image.url)
             return Response({
                 "message":"About details retrieved successfully",
                 "data":AboutSerializer(about).data

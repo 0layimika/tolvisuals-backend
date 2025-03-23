@@ -103,8 +103,14 @@ class AboutSerializer(serializers.ModelSerializer):
     class Meta:
         model = About
         fields = ['text','top_image','main_img']
-    def top_image(self, obj):
+
+    def get_image_url(self, obj, image_field):
+        image = getattr(obj, image_field)
+        return image.url if image else None
+
+    def get_top_image(self, obj):
+        print("image:",obj)
         return self.get_image_url(obj, "top_image")
 
-    def main_img(self, obj):
+    def get_main_img(self, obj):
         return self.get_image_url(obj, "main_img")
