@@ -7,9 +7,13 @@ from manager.models import *
 from django.shortcuts import get_object_or_404
 from django.core.files.uploadedfile import UploadedFile
 from PIL import Image
+from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
-
+class CustomPagination(PageNumberPagination):
+    page_size = 15
+    page_size_query_param = 'page_size'
+    max_page_size = 15
 class PortfolioView(APIView):
     def get(self, request):
         try:
@@ -30,9 +34,11 @@ class ClientView(APIView):
     def get(self, request):
         try:
             clients = Client.objects.all()
-            return Response(
-                {"message": "clients retrieved successfully", "data": ClientSerializer(clients, many=True).data},
-                status=status.HTTP_200_OK)
+            paginator = CustomPagination()
+            paginated_clients = paginator.paginate_queryset(clients, request)
+
+            return paginator.get_paginated_response(
+                {"message": "clients retrieved successfully", "data": ClientSerializer(paginated_clients, many=True).data})
         except Exception as e:
             return Response({"message": "failed to retrieve clients", "error": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)

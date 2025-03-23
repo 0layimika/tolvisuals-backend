@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+
+import rest_framework.pagination
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -81,6 +83,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'tolsvisual_backend.wsgi.application'
 

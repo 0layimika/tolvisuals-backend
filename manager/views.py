@@ -50,7 +50,7 @@ def create_client(request):
         if name:
             try:
                 with transaction.atomic():  # Start atomic transaction
-                    client = Client.objects.create(name=name)  # Create client
+                    client = Client.objects.create(name=name, category=category)  # Create client
 
                     # Create client images
                     for img in images:
