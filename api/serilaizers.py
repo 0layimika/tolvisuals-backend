@@ -57,10 +57,13 @@ class HomeSerializer(serializers.ModelSerializer):
     image_5 = serializers.SerializerMethodField()
     image_6 = serializers.SerializerMethodField()
     image_7 = serializers.SerializerMethodField()
+    wedding_img = serializers.SerializerMethodField()
+    portrait_img= serializers.SerializerMethodField()
+    engagement_img = serializers.SerializerMethodField()
 
     class Meta:
         model = Home
-        fields = ['text', 'image_1', 'image_2', 'image_3', 'image_4', 'image_5', 'image_6', 'image_7']
+        fields = ['text', 'image_1', 'image_2', 'image_3', 'image_4', 'image_5', 'image_6', 'image_7','wedding_img',"portrait_img",'engagement_img']
 
     def get_image_url(self, obj, image_field):
         image = getattr(obj, image_field)
@@ -86,14 +89,22 @@ class HomeSerializer(serializers.ModelSerializer):
 
     def get_image_7(self, obj):
         return self.get_image_url(obj, "image_7")
+    def get_wedding_img(self, obj):
+        return self.get_image_url(obj,"wedding_img")
+    def get_portrait_img(self,obj):
+        return self.get_image_url(obj,'portrait_img')
+    def get_engagement_img(self, obj):
+        return self.get_image_url(obj,'engagement_img')
 
 class AboutSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField()
+    top_image = serializers.SerializerMethodField()
+    main_img = serializers.SerializerMethodField()
 
     class Meta:
         model = About
-        fields = ['text','image','image_url']
-    def get_image_url(self, obj):
-        if obj.image:
-            return f"https://res.cloudinary.com/dd7laegor/{obj.image}"
-        return None
+        fields = ['text','top_image','main_img']
+    def top_image(self, obj):
+        return self.get_image_url(obj, "top_image")
+
+    def main_img(self, obj):
+        return self.get_image_url(obj, "main_img")

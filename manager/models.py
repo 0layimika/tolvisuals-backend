@@ -55,13 +55,16 @@ class FAQ(models.Model):
 
 class Home(models.Model):
     text = models.TextField()
-    image_1 = CloudinaryField("image", folder="TolsVisual/home_page")
-    image_2 = CloudinaryField("image", folder="TolsVisual/home_page")
-    image_3 = CloudinaryField("image", folder="TolsVisual/home_page")
-    image_4 = CloudinaryField("image", folder="TolsVisual/home_page")
-    image_5 = CloudinaryField("image", folder="TolsVisual/home_page")
-    image_6 = CloudinaryField("image", folder="TolsVisual/home_page")
-    image_7 = CloudinaryField("image", folder="TolsVisual/home_page")
+    image_1 = CloudinaryField("image_1", folder="TolsVisual/home_page")
+    image_2 = CloudinaryField("image_2", folder="TolsVisual/home_page")
+    image_3 = CloudinaryField("image_3", folder="TolsVisual/home_page")
+    image_4 = CloudinaryField("image_4", folder="TolsVisual/home_page")
+    image_5 = CloudinaryField("image_5", folder="TolsVisual/home_page")
+    image_6 = CloudinaryField("image_6", folder="TolsVisual/home_page")
+    image_7 = CloudinaryField("image_7", folder="TolsVisual/home_page")
+    wedding_img= CloudinaryField("wedding_image", folder="TolsVisual/home_page", null=True)
+    portrait_img = CloudinaryField("portrait_image", folder="TolsVisual/home_page", null=True)
+    engagement_img = CloudinaryField("engagement_image", folder="TolsVisual/home_page", null=True)
 
     def save(self, *args, **kwargs):
         if Home.objects.exists() and not self.pk:
@@ -73,7 +76,8 @@ class Home(models.Model):
 
 class About(models.Model):
     text = models.TextField()
-    image = CloudinaryField('imaage', folder="TolsVisual/about")
+    top_image = CloudinaryField('top_image', folder="TolsVisual/about", null=True)
+    main_img = CloudinaryField('main_img', folder="TolsVisual/about", null=True)
 
     def __str__(self):
         return "about details"
