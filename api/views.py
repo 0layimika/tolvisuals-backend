@@ -13,7 +13,11 @@ from PIL import Image
 class PortfolioView(APIView):
     def get(self, request):
         try:
-            portfolio = Portfolio.objects.all()
+            category = request.query_params.get('category')
+            if category:
+                portfolio = Portfolio.objects.filter(category__icontains=category)
+            else:
+                portfolio = Portfolio.objects.all()
             return Response(
                 {"message": "portfolio retrieved successfully", "data": PortfolioSerializer(portfolio, many=True).data},
                 status=status.HTTP_200_OK)
