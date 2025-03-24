@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
@@ -30,7 +32,7 @@ class CustomPagination(PageNumberPagination):
             "current_page": self.page.number if self.page else 1,
             "next": self.get_next_link() if self.page else None,
             "previous": self.get_previous_link() if self.page else None,
-            "data": data
+            "data":data
         })
 
 class PortfolioView(APIView):
@@ -125,10 +127,11 @@ class ReviewView(APIView):
 class ClientImagesVIew(APIView):
     def get(self, request, id):
         try:
-            client = get_object_or_404(Client, pk=id),
+            client = get_object_or_404(Client, pk=id)
             images = ClientImage.objects.filter(client=id)
             return Response({
                 "message": "Images retrieved successfully",
+                "client_name":client.name,
                 "images": ClientImageSerializer(images, many=True).data
             }, status=status.HTTP_200_OK)
         except Exception as e:
