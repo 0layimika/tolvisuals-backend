@@ -14,6 +14,25 @@ class CustomPagination(PageNumberPagination):
     page_size = 15
     page_size_query_param = 'page_size'
     max_page_size = 15
+
+    def paginate_queryset(self, queryset, request, view=None):
+        try:
+            return super().paginate_queryset(queryset, request, view)
+        except Exception:
+            self.page = None
+            return []
+
+    def get_paginated_response(self, data):
+        total_pages = self.page.paginator.num_pages if self.page else 0
+        return Response({
+            "message": "clients retrieved successfully",
+            "total_pages": total_pages,
+            "current_page": self.page.number if self.page else 1,
+            "next": self.get_next_link() if self.page else None,
+            "previous": self.get_previous_link() if self.page else None,
+            "data": data
+        })
+
 class PortfolioView(APIView):
     def get(self, request):
         try:
@@ -33,7 +52,11 @@ class PortfolioView(APIView):
 class ClientView(APIView):
     def get(self, request):
         try:
-            clients = Client.objects.all()
+            category = request.query_params.get("category")
+            if category:
+                clients = Client.objects.filter(category__icontains=category)
+            else:
+                clients = Client.objects.all()
             paginator = CustomPagination()
             paginated_clients = paginator.paginate_queryset(clients, request)
 

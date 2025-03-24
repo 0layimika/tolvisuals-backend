@@ -6,7 +6,7 @@ class Portfolio(models.Model):
         ("Weddings",'weddings'),
         ("Engagements",'engagements'),
         ("Portraits",'portraits'),
-        ("Kids and Family", "kids and family"),
+        ("Children and Family", "children and family"),
         ("Products and Lifestyle", "products and lifestyle")
     ]
     category = models.CharField(max_length=30, choices=category_choice)
@@ -28,7 +28,7 @@ class Client(models.Model):
         ("Weddings", 'weddings'),
         ("Engagements", 'engagements'),
         ("Portraits", 'portraits'),
-        ("Kids and Family", "kids and family"),
+        ("Children and Family", "children and family"),
         ("Products and Lifestyle","products and lifestyle")
     ]
     category = models.CharField(max_length=30, choices=category_choice)
