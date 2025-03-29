@@ -1,6 +1,9 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
 # Create your models here.
+from django.utils import timezone
+
+
 class Portfolio(models.Model):
     category_choice=[
         ("Weddings",'weddings'),
@@ -90,6 +93,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=256)
     thumbmail = CloudinaryField('thumbmail', folder="TolsVisual/blog", null=True)
     content = models.TextField()
+    date = models.DateField(default=timezone.now)
 
     def __str__(self):
         return self.title

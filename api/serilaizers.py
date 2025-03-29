@@ -119,7 +119,7 @@ class BlogSerializer(serializers.ModelSerializer):
     thumbmail = serializers.SerializerMethodField()
     class Meta:
         model = Blog
-        fields = ['id','title','thumbmail','content']
+        fields = ['id','date','title','thumbmail','content']
 
     def get_image_url(self, obj, image_field):
         image = getattr(obj, image_field)
