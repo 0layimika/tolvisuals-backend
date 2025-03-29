@@ -13,7 +13,7 @@ from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
 class CustomPagination(PageNumberPagination):
-    page_size = 15
+    page_size = 9
     page_size_query_param = 'page_size'
     max_page_size = 15
 
@@ -24,16 +24,16 @@ class CustomPagination(PageNumberPagination):
             self.page = None
             return []
 
-    def get_paginated_response(self, data):
+    def get_paginated_response(self, data, item):
         total_pages = self.page.paginator.num_pages if self.page else 0
         return Response({
-            "message": "clients retrieved successfully",
+            "message": f"{item} retrieved successfully",
             "total_pages": total_pages,
             "current_page": self.page.number if self.page else 1,
             "next": self.get_next_link() if self.page else None,
             "previous": self.get_previous_link() if self.page else None,
             "data":data
-        })
+        }, status=status.HTTP_200_OK)
 
 class PortfolioView(APIView):
     def get(self, request):
@@ -63,7 +63,7 @@ class ClientView(APIView):
             paginated_clients = paginator.paginate_queryset(clients, request)
 
             return paginator.get_paginated_response(
-                {"message": "clients retrieved successfully", "data": ClientSerializer(paginated_clients, many=True).data})
+                {"message": "clients retrieved successfully", "data": ClientSerializer(paginated_clients, many=True).data},"clients")
         except Exception as e:
             return Response({"message": "failed to retrieve clients", "error": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -169,4 +169,33 @@ class AboutView(APIView):
                 "message":"Error retrieving about details",
                 "error":str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class BlogView(APIView):
+    def get(self, request):
+        try:
+            blogs = Blog.objects.order_by('-id')
+            paginator = CustomPagination()
+            paginated_blogs = paginator.paginate_queryset(blogs, request)
+            return paginator.get_paginated_response(BlogSerializer(paginated_blogs,many=True).data,"blogs")
+        except Exception as e:
+            return Response({
+                "message":"Failed to retrieve blogs",
+                "error":str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class SpecificBlog(APIView):
+    def get(self, request, id):
+        try:
+            blog = get_object_or_404(Blog,pk=id)
+            return Response({
+                "message":"Blog retrieved successfully",
+                "data":BlogSerializer(blog).data
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                "message":"Failed to retrieve blogs",
+                "error":str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 

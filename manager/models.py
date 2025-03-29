@@ -85,3 +85,11 @@ class About(models.Model):
 
     def __str__(self):
         return "about details"
+
+class Blog(models.Model):
+    title = models.CharField(max_length=256)
+    thumbmail = CloudinaryField('thumbmail', folder="TolsVisual/blog", null=True)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title

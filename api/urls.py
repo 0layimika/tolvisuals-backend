@@ -7,5 +7,7 @@ urlpatterns=[
     path('review', ReviewView.as_view(), name='review'),
     path("clients/<int:id>",ClientImagesVIew.as_view(), name='client-images'),
     path("home", HomeView.as_view(), name='home-be'),
-    path("about", AboutView.as_view(), name='about')
+    path("about", AboutView.as_view(), name='about'),
+    path("blogs",BlogView.as_view(), name="blogs"),
+    path("blogs/<int:id>",SpecificBlog.as_view(), name="specific-blog")
 ]
