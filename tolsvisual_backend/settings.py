@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
 import rest_framework.pagination
 from dotenv import load_dotenv
 
@@ -99,11 +100,18 @@ WSGI_APPLICATION = 'tolsvisual_backend.wsgi.application'
 #         }
 #     }
 # else:
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, "db.sqlite3"),  # Works locally
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, "db.sqlite3"),  # Works locally
-    }
+    'default': dj_database_url.config(
+        default=os.getenv("DB_URL"),
+        conn_max_age=600
+    )
 }
 
 # Password validation
